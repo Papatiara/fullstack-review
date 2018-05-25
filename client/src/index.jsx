@@ -12,10 +12,23 @@ class App extends React.Component {
     }
 
   }
-
+  send(message) {
+    fetch('http://localhost:1128/repos', {
+      body: JSON.stringify(message),
+      method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+       },
+        }).then(res => {
+        }).catch(err => err);
+} 
   search (term) {
     console.log(`${term} was searched`);
-    // TODO
+    var obj = {
+      user: term
+    }
+    this.send(obj);
   }
 
   render () {
