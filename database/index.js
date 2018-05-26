@@ -3,24 +3,32 @@ mongoose.connect('mongodb://localhost/fetcher');
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  id: Number,
-  name: String,
-  full_name: String,
+  RepoName: String,
+  user: String,
+  forks: Number,
 });
-
 
 var Repo = mongoose.model('Repo', repoSchema);
 
 let save = (data) => {
+  console.log('new data' , data)
   var myData = new Repo(data);
     myData.save()
       .then(item => {
-        //  res.send("item saved to database");
     })
       .catch(err => {
-        // res.status(400).send("unable to save to database");
       });
-  
-}
+  }
 
+let find = (callback) =>  {
+    Repo.find({}, function(err, data) { 
+      if (err) {
+        console.log(err)
+      } else {
+        callback(data);
+      }    
+});
+}
 module.exports.save = save;
+module.exports.find = find;
+

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
+import Repo from './components/Repo.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class App extends React.Component {
     this.state = { 
       repos: []
     }
-
+    this.get = this.get.bind(this)
+    this.send = this.send.bind(this)
   }
   send(message) {
     fetch('http://localhost:1128/repos', {
@@ -21,7 +23,20 @@ class App extends React.Component {
          'Content-Type': 'application/json',
        },
         }).then(res => {
+          this.get()
+
         }).catch(err => err);
+} 
+get() { 
+  $.ajax({
+    url: 'http://localhost:1128/repos',
+    type: 'GET',
+    success: (res) => {
+         this.setState({
+         repos: res
+       })
+    }
+});
 } 
   search (term) {
     console.log(`${term} was searched`);
@@ -34,7 +49,10 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
-      <RepoList repos={this.state.repos}/>
+       <Repo repos={this.state.repos}/>
+       {this.state.repos.map((elem, key) =>
+      <RepoList elem={elem.RepoName} key={key}/>
+      )}  
       <Search onSearch={this.search.bind(this)}/>
     </div>)
   }
