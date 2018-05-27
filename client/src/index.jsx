@@ -30,7 +30,8 @@ class App extends React.Component {
 get() { 
   $.ajax({
     url: 'http://localhost:1128/repos',
-    type: 'GET',
+    method: 'GET',
+    // dataType:
     success: (res) => {
          this.setState({
          repos: res
@@ -51,7 +52,7 @@ get() {
       <h1>Github Fetcher</h1>
        <Repo repos={this.state.repos}/>
        {this.state.repos.map((elem, key) =>
-      <RepoList elem={elem.RepoName} key={key}/>
+      <RepoList elem={elem.RepoName} url={elem.url} key={key}/>
       )}  
       <Search onSearch={this.search.bind(this)}/>
     </div>)

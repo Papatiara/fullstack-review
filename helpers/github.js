@@ -4,24 +4,18 @@ const db = require('../database/index.js')
 
 
 let getReposByUsername = (user)  =>  {
-  // TODO - Use the request module to request repos for a specific
-  // user from the github API
-
-  // The options object has been provided to help you out, 
-  // but you'll have to fill in the URL
- 
   const options = {  
     url: `https://api.github.com/users/${user}/repos`,
     method: 'GET',
     headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'request',
-        'Authorization': `token ${config.TOKEN}`
+      'Accept': 'application/json',
+      'User-Agent': 'request',
+      'Authorization': `token ${config.TOKEN}`
     }
 };
-request(options, function(err, res, body) {  
+  request(options, function(err, res, body) {  
     if (err) {
-      console.log(err)
+      res.status(500).send()
     } else {
       console.log(body)
       var parse = JSON.parse(body)
@@ -29,7 +23,8 @@ request(options, function(err, res, body) {
       RepoName: parse[0].name,
       user: parse[0].owner.login,
       forks: parse[0].forks,
-    }
+      url: parse[0].html_url
+   }
     db.save(obj)
   }
 });
